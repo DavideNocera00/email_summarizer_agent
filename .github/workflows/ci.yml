@@ -17,6 +17,7 @@ jobs:
       GOOGLE_CLIENT_SECRET: test-client-secret
       GOOGLE_REDIRECT_URI: http://localhost:8000/auth/callback
       SESSION_SECRET: test-session-secret
+      ENCRYPTION_KEY: 4EUA4P3wjynuw5muqhZ5IbEVIE0Rn-UD7VLz4LycATc=
     
     services:
       postgres:
