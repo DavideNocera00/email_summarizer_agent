@@ -1,7 +1,15 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends, HTTPException
+from fastapi.responses import RedirectResponse
+
+from sqlalchemy.orm import Session
+
 from starlette.middleware.sessions import SessionMiddleware
+
 from app.config import settings
 from app.auth import oauth
+from app.crud import insert_user
+from app.database import get_db
+from app.models import User
 
 app = FastAPI(title="Email Summarizer Agent")
 app.add_middleware(
@@ -25,11 +33,19 @@ async def login(request: Request):
     )
 
 @app.get("/auth/callback")
-async def callback(request: Request):
+async def callback(request: Request, db: Session = Depends(get_db)):
     token = await oauth.google.authorize_access_token(request)
     userinfo = token["userinfo"]
-    return {
-        "email": userinfo["email"],
-        "has_refresh_token": "refresh_token" in token,
-        "scope": token.get("scope"),
-    }
+
+    user = insert_user(db, userinfo["email"], token.get("refresh_token"))
+    request.session["user_id"] = user.id
+    return RedirectResponse("/me")
+
+@app.get("/me")
+def me(request: Request, db: Session = Depends(get_db)):
+    user_id = request.session.get("user_id")
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not Authenticated")
+
+    user = db.get(User, user_id)
+    return {"id": user.id, "email": user.email}
