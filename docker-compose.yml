@@ -14,6 +14,14 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
   
 volumes:
   pgdata:
