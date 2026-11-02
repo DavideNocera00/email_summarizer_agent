@@ -18,6 +18,7 @@ jobs:
       GOOGLE_REDIRECT_URI: http://localhost:8000/auth/callback
       SESSION_SECRET: test-session-secret
       ENCRYPTION_KEY: 4EUA4P3wjynuw5muqhZ5IbEVIE0Rn-UD7VLz4LycATc=
+      GOOGLE_API_KEY: test-google-api-key
     
     services:
       postgres:

@@ -6,7 +6,12 @@ class EmailItem(TypedDict):
     sender: str
     snippet: str
 
+class ClassifiedEmail(EmailItem):
+    category: str
+    summary: str
+    requires_action: bool
+
 class AgentState(TypedDict):
     emails: list[EmailItem]
-    classified: list[dict]
+    classified: list[ClassifiedEmail]
     digest: str

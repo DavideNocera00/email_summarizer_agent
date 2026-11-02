@@ -10,3 +10,4 @@ itsdangerous==2.2.0
 cryptography==50.0.2
 langchain-core==1.7.3
 langgraph==1.2.19
+langchain-google-genai==4.4.2
